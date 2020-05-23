@@ -5,7 +5,9 @@ void main(void) {
 	int nlines = 5;
 	int ncolumns = 5;
 
-	initscr();
+	initscr(); // initialize curses
+	noecho(); // don't echo keystrokes (so it won't output what the user is typing)
+	curs_set(0); // set cursor visibility to zero
 
 	keypad(stdscr, TRUE);
 
@@ -45,17 +47,16 @@ void main(void) {
 				} else {
 					move(cursor_y, ++cursor_x);
 				}
-			case KEY_BACKSPACE
-				addch(marks[player]);
-				printw("%d", player);
+				break;
+			case KEY_BACKSPACE:
+				mvaddch(cursor_y, cursor_x, marks[player]);
 				player = !player;
-				printw("%d", player);
 				break;
 		}
-		refresh();
+		refresh(); // refresh window
 	}
 
-	endwin();
+	endwin(); // close curses
 
 	printf("Finished\n");
 	//printf("How many lines do you need?\n");
