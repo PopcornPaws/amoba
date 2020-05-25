@@ -4,12 +4,9 @@
 #include <curses.h>
 
 #include "cursor.h"
+#include "game_data.h"
 
-typedef struct GameData {
-	Cursor *cursor;
-	char *table;
-} GameData;
-
+/*
 void save_to_file(GameData *gd) {
 	char path[] = "data/"; 
 	char filename[10];
@@ -68,12 +65,9 @@ GameData read_from_file() {
 
 //GameData init_game_data(unsigned int nr; unsigned int nc, unsigned int mw) {
 //}
+*/
 
 void main(void) {
-	//printf("How many lines do you need?\n");
-	//scanf("%d", &nlines); 
-	//printf("How many rows do you need?\n");
-	//scanf("%d", &rows); 
 	unsigned int nrows = 5;
 	unsigned int ncolumns = 5;
 	unsigned int marks_to_win = 4;
@@ -92,21 +86,20 @@ void main(void) {
 	//wborder(win, '*', '*', '*', '*', '*', '*', '*', '*');
 
 	Cursor cursor;
-	getyx(stdscr, cursor.y, cursor.x);
+	cursor.x = ncolumns / 2;
+	cursor.y = nrows / 2;
 	cursor.ncols = ncolumns;
 	cursor.nrows = nrows;
 	cursor.player = 0;
 	strcpy(cursor.marks, "xo");
 
+	move(cursor.y, cursor.x);
+
 	unsigned int ntiles = nrows * ncolumns;
 	char table[ntiles + 1];
-	for (int i = 0; i < ntiles; i++) table[i] = 'x';
+	for (int i = 0; i < ntiles; i++) table[i] = ' ';
 	table[ntiles] = '\0';
 
-	endwin();
-	printf("%s\n", table);
-
-	/*
 	int ch;
 	int flag = 0;
 	unsigned int rounds = 0;
@@ -155,12 +148,11 @@ void main(void) {
 	} else {
 		printf("Draw!\n", cursor.marks[cursor.player]);
 	}
-	*/
-	GameData gd_w = {&cursor, table};
-	save_to_file(&gd_w);
+	//GameData gd_w = {&cursor, table};
+	//save_to_file(&gd_w);
 
-	GameData gd_r = read_from_file();
-	printf("%s\n", gd_r.table);
+	//GameData gd_r = read_from_file();
+	//printf("%s\n", gd_r.table);
 	//cursor.x = 0;
 	//cursor.y = 3;
 	//printf("x = %d, y = %d, i = %d\n", cursor.x, cursor.y, get_table_index(cursor.x, cursor.y, cursor.ncols));
