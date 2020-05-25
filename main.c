@@ -4,73 +4,26 @@
 #include <curses.h>
 
 #include "cursor.h"
-#include "game_data.h"
-
-/*
-void save_to_file(GameData *gd) {
-	char path[] = "data/"; 
-	char filename[10];
-	//printf("Please type the name of the file:\n");
-	//scanf("%s", filename); 
-	strcpy(filename, "test");
-	strcat(filename, ".dat");
-	strcat(path, filename);
-
-	FILE *fp;
-	fp = fopen(path, "w");
-	if (fp == NULL) {
-		printf("Couldn't open file!");
-		return;
-	}
-	int table_len = gd -> cursor -> ncols * gd -> cursor -> nrows + 1;
-	fwrite(gd -> cursor, sizeof(Cursor), 1, fp);
-	fputs("\n", fp);
-	fwrite(gd -> table, sizeof(char), table_len, fp);
-	fclose(fp);
-	printf("Saved data to: %s\n", path);
-}
-
-GameData read_from_file() {
-	char path[] = "data/"; 
-	char filename[10];
-	//printf("Please type the name of the file:\n");
-	//scanf("%s", filename); 
-	strcpy(filename, "test");
-	strcat(filename, ".dat");
-	strcat(path, filename);
-
-	FILE *fp;
-	fp = fopen(path, "r");
-	if (fp == NULL) {
-		printf("File does not exist!\n");
-		exit(1);
-	}
-
-	Cursor cursor;
-	char *table;
-
-	fread(&cursor, sizeof(Cursor), 1, fp);
-	int table_len = cursor.ncols * cursor.nrows + 1;
-	printf("len = %d\n", table_len);
-
-	fseek(fp, 1, SEEK_CUR); // add an offset to file pointer to "jump over" the additional newline character
-	table = (char *)malloc(table_len);
-	fread(table, sizeof(char), table_len, fp);
-
-	GameData gd;
-	gd.cursor = &cursor;
-	gd.table = table;
-	return gd;
-}
-
-//GameData init_game_data(unsigned int nr; unsigned int nc, unsigned int mw) {
-//}
-*/
+#include "gamedata.h"
 
 void main(void) {
 	unsigned int nrows = 5;
 	unsigned int ncolumns = 5;
 	unsigned int marks_to_win = 4;
+
+	Cursor cursor;
+	cursor.x = ncolumns / 2;
+	cursor.y = nrows / 2;
+	cursor.ncols = ncolumns;
+	cursor.nrows = nrows;
+	cursor.marks_to_win = marks_to_win;
+	cursor.player = 0;
+	strcpy(cursor.marks, "xo");
+
+	unsigned int ntiles = nrows * ncolumns;
+	char table[ntiles + 1];
+	for (int i = 0; i < ntiles; i++) table[i] = ' ';
+	table[ntiles] = '\0';
 
 	initscr(); // initialize curses
 	noecho(); // don't echo keystrokes (so it won't output what the user is typing)
@@ -85,26 +38,12 @@ void main(void) {
 	WINDOW *win = newwin(nrows, ncolumns, 0, 0);
 	//wborder(win, '*', '*', '*', '*', '*', '*', '*', '*');
 
-	Cursor cursor;
-	cursor.x = ncolumns / 2;
-	cursor.y = nrows / 2;
-	cursor.ncols = ncolumns;
-	cursor.nrows = nrows;
-	cursor.player = 0;
-	strcpy(cursor.marks, "xo");
-
-	move(cursor.y, cursor.x);
-
-	unsigned int ntiles = nrows * ncolumns;
-	char table[ntiles + 1];
-	for (int i = 0; i < ntiles; i++) table[i] = ' ';
-	table[ntiles] = '\0';
-
 	int ch;
 	int flag = 0;
 	unsigned int rounds = 0;
 	unsigned int table_index;
 
+	move(cursor.y, cursor.x); // move cursor to specific location
 	while((ch = getch()) != KEY_F(1)) {
 		switch (ch) {
 			case KEY_UP:
@@ -126,7 +65,7 @@ void main(void) {
 					attron(COLOR_PAIR(cursor.player + 1));
 					mvaddch(cursor.y, cursor.x, cursor.marks[cursor.player]);
 					table[table_index] = cursor.marks[cursor.player];
-					flag = is_winner(&cursor, table, marks_to_win);
+					flag = is_winner(&cursor, table);
 					if (flag) break;
 					cursor.player = !cursor.player;
 					rounds++;

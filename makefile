@@ -16,7 +16,8 @@ $(info $$HDEPS is [${HDEPS}])
 CDEPS := $(notdir $(shell find $(SRCDIR) -name '*.c'))
 $(info $$CDEPS is [${CDEPS}])
 # Object files
-OBJFILES = $(subst .c,.o,$(CDEPS))
+OBJS = $(subst .c,.o,$(CDEPS))
+OBJFILES = $(addprefix $(OBJDIR)/,$(OBJS))
 $(info $$OBJFILES is [${OBJFILES}])
 # Define compiler
 CC = gcc
@@ -28,7 +29,9 @@ run : $(OUTDIR)/$(PROJECT)
 	$^
 
 # Generate executable from object files
-$(OUTDIR)/$(PROJECT) : $(OBJDIR)/$(OBJFILES) $(OBJDIR)/$(PROJECT).o | $(OUTDIR)
+$(info ${OBJDIR}/${OBJFILES})
+
+$(OUTDIR)/$(PROJECT) : $(OBJFILES) $(OBJDIR)/$(PROJECT).o | $(OUTDIR)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 # Generate object files 

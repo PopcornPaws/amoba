@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "cursor.h"
+#include "gamedata.h"
 
 void save_to_file(GameData *gd) {
 	char path[] = "data/"; 
@@ -64,7 +68,7 @@ GameData init_game_data() {
 	printf("How many columns do you need?\n");
 	scanf("%d", &ncolumns); 
 	printf("How many rows do you need?\n");
-	scanf("%d", &rows); 
+	scanf("%d", &nrows); 
 	printf("How many consecutive marks should win?\n");
 	scanf("%d", &marks_to_win); 
 	// TODO check if marks_to_win is at least 3 or 4, but not exceeding nrows or ncolumns
@@ -74,6 +78,7 @@ GameData init_game_data() {
 	cursor.y = nrows / 2;
 	cursor.ncols = ncolumns;
 	cursor.nrows = nrows;
+	cursor.marks_to_win = marks_to_win;
 	cursor.player = 0;
 	strcpy(cursor.marks, "xo");
 

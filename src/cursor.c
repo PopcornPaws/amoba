@@ -4,7 +4,7 @@ unsigned int get_table_index(unsigned int x, unsigned int y, unsigned int ncolum
 	return x + y * ncolumns;
 }
 
-int is_winner(Cursor *c, char *table, unsigned int w) {
+int is_winner(Cursor *c, char *table) {
 	unsigned int counter = 0; // counter of same consecutive marks
 	unsigned int N = 0, S = 0, E = 0, W = 0; // norht, south, east, west absolute shift from center point
 	unsigned int NW, NE, SW, SE; //northwest, northeast, southwest, southeast
@@ -12,7 +12,7 @@ int is_winner(Cursor *c, char *table, unsigned int w) {
 
 	// find N, S, E, W tiles from w - 1 direction of the current position 
 	// if we would violate the playing area constraints, then we stop the in- or decrementation
-	while (i < w - 1) {
+	while (i < (c -> marks_to_win) - 1) {
 		i++;
 		(c -> y - N) > 0 ? N++ : N;
 		(c -> x - W) > 0 ? W++ : W;
@@ -35,7 +35,7 @@ int is_winner(Cursor *c, char *table, unsigned int w) {
 		y = c -> y + SW - i; // south west is in positive y direction from current point
 		table_index = get_table_index(x, y, c -> ncols);
 		counter += (table[table_index] == c -> marks[c -> player] ? : -counter);
-		if (counter == w) return 1;
+		if (counter == c -> marks_to_win) return 1;
 		i++;
 	}
 	// W -> E
@@ -46,7 +46,7 @@ int is_winner(Cursor *c, char *table, unsigned int w) {
 		y = c -> y; // y doesn't change during horizontal movement
 		table_index = get_table_index(x, y, c -> ncols);
 		counter += (table[table_index] == c -> marks[c -> player] ? : -counter);
-		if (counter == w) return 1;
+		if (counter == c -> marks_to_win) return 1;
 		i++;
 	}
 	// NW -> SE
@@ -57,7 +57,7 @@ int is_winner(Cursor *c, char *table, unsigned int w) {
 		y = c -> y - NW + i; // south west is in negative y direction from current point
 		table_index = get_table_index(x, y, c -> ncols);
 		counter += (table[table_index] == c -> marks[c -> player] ? : -counter);
-		if (counter == w) return 1;
+		if (counter == c -> marks_to_win) return 1;
 		i++;
 	}
 	// N -> S 
@@ -68,7 +68,7 @@ int is_winner(Cursor *c, char *table, unsigned int w) {
 		y = c -> y - N + i; // north is in negative y direction from current point
 		table_index = get_table_index(x, y, c -> ncols);
 		counter += (table[table_index] == c -> marks[c -> player] ? : -counter);
-		if (counter == w) return 1;
+		if (counter == c -> marks_to_win) return 1;
 		i++;
 	}
 	// if there are not enough markers in any direction we haven't won yet
