@@ -63,9 +63,9 @@ GameData load_from_file() {
 }
 
 GameData init_game_data() {
-	unsigned int nrows;
-	unsigned int ncolumns;
-	unsigned int marks_to_win;
+	int nrows;
+	int ncolumns;
+	int marks_to_win;
 	
 	printf("Starting new game!\n");
 	printf("How many columns do you need?\n");
@@ -74,7 +74,14 @@ GameData init_game_data() {
 	scanf("%d", &nrows); 
 	printf("How many consecutive marks should win?\n");
 	scanf("%d", &marks_to_win); 
-	// TODO check if marks_to_win is at least 3 or 4, but not exceeding nrows or ncolumns
+	
+	if(nrows < 3) { 
+		nrows = 3;
+	} else if (ncolumns < 3) {
+		ncolumns = 3;
+	} else if (marks_to_win < 3) {
+		marks_to_win = 3;
+	}
 
 	Cursor cursor;
 	cursor.x = ncolumns / 2 + 1;
@@ -86,7 +93,7 @@ GameData init_game_data() {
 	cursor.player = 0;
 	strcpy(cursor.marks, "xo");
 
-	unsigned int ntiles = nrows * ncolumns;
+	int ntiles = nrows * ncolumns;
 	char table[ntiles + 1];
 	for (int i = 0; i < ntiles; i++) table[i] = ' ';
 	table[ntiles] = '\0';

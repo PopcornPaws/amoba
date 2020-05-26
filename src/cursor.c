@@ -1,13 +1,13 @@
 #include "cursor.h"
 
-unsigned int get_table_index(unsigned int x, unsigned int y, unsigned int ncolumns) {
+int get_table_index(int x, int y, int ncolumns) {
 	return x + y * ncolumns;
 }
 
 int is_winner(Cursor *c, char *table) {
-	unsigned int counter = 0; // counter of same consecutive marks
-	unsigned int N = 0, S = 0, E = 0, W = 0; // norht, south, east, west absolute shift from center point
-	unsigned int NW, NE, SW, SE; //northwest, northeast, southwest, southeast
+	int counter = 0; // counter of same consecutive marks
+	int N = 0, S = 0, E = 0, W = 0; // norht, south, east, west absolute shift from center point
+	int NW, NE, SW, SE; //northwest, northeast, southwest, southeast
 	int i = 0;
 
 	// find N, S, E, W tiles from w - 1 direction of the current position 
@@ -25,8 +25,8 @@ int is_winner(Cursor *c, char *table) {
 	SW = (S <= W ? S : W);
 	SE = (S <= E ? S : E);
 	// run checks in four directions (SW -> NE, W -> E, NW -> SW, N -> S)
-	unsigned int table_index;
-	unsigned int x, y;
+	int table_index;
+	int x, y;
 	// SW -> NE
 	counter = 0; // reset marker counter
 	i = 0; // reset loop counter
@@ -75,7 +75,7 @@ int is_winner(Cursor *c, char *table) {
 	return 0;
 }
 
-int is_free(char *table, unsigned int index) {
+int is_free(char *table, int index) {
 
 	return table[index] == ' ';
 }

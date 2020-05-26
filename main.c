@@ -67,8 +67,7 @@ void main(void) {
 	// initialize variables
 	int ch;
 	int flag = 0;
-	unsigned int table_index;
-	unsigned int ntiles = cursor.nrows * cursor.ncols;
+	int table_index;
 	// fill up game area with marks already in the table
 	for (int row = 0; row < cursor.nrows; row++) {
 		for (int col = 0; col < cursor.ncols; col++) {
@@ -88,6 +87,12 @@ void main(void) {
 			}
 		}
 	}
+	// print "user manual"
+	mvprintw(1, cursor.ncols + 3, "%c's turn!", cursor.marks[cursor.player]);
+	mvaddstr(3, cursor.ncols + 3, "ARROWS    - move");
+	mvaddstr(4, cursor.ncols + 3, "ENTER     - place mark");
+	mvaddstr(5, cursor.ncols + 3, "BACKSPACE - save and quit");
+	mvaddstr(6, cursor.ncols + 3, "F1        - quit");
 
 	move(cursor.y, cursor.x); // move cursor to specific location
 	while((ch = getch()) != KEY_F(1)) {
@@ -114,6 +119,7 @@ void main(void) {
 				if (is_free(table, table_index)) {
 					attron(COLOR_PAIR(cursor.player + 1)); // switch color pair to match the player's
 					mvaddch(cursor.y, cursor.x, cursor.marks[cursor.player]); // add character mark to curses game area
+					attroff(COLOR_PAIR(cursor.player + 1)); // switch color pair to match the player's
 					table[table_index] = cursor.marks[cursor.player]; // fill table with the placed mark
 					flag = is_winner(&cursor, table);
 					if (flag) break; // if we won, exit
@@ -122,11 +128,15 @@ void main(void) {
 				}
 				break;
 		}
-		move(cursor.y, cursor.x);
+		// print who's turn it is
+		mvprintw(1, cursor.ncols + 3, "%c's turn!", cursor.marks[cursor.player]);
+		move(cursor.y, cursor.x); // move cursor back to the playing area
 		refresh(); // refresh window
 		if (flag) {
+			// we have a winner
 			break;
-		} else if (cursor.rounds_played == ntiles) {
+		} else if (cursor.rounds_played == cursor.nrows * cursor.ncols) {
+			// all tiles has been filled
 			break;
 		}
 	}
