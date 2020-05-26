@@ -16,6 +16,7 @@ void save_to_file(GameData *gd) {
 	FILE *fp;
 	fp = fopen(path, "w");
 	if (fp == NULL) {
+		fclose(fp);
 		printf("Couldn't open file!");
 		return;
 	}
@@ -27,7 +28,7 @@ void save_to_file(GameData *gd) {
 	printf("Saved data to: %s\n", path);
 }
 
-GameData read_from_file() {
+GameData load_from_file() {
 	char path[] = "data/"; 
 	char filename[10];
 	//printf("Please type the name of the file:\n");
@@ -39,6 +40,7 @@ GameData read_from_file() {
 	FILE *fp;
 	fp = fopen(path, "r");
 	if (fp == NULL) {
+		fclose(fp);
 		printf("File does not exist!\n");
 		exit(1);
 	}
@@ -50,9 +52,12 @@ GameData read_from_file() {
 	int table_len = cursor.ncols * cursor.nrows + 1;
 	printf("len = %d\n", table_len);
 
-	fseek(fp, 1, SEEK_CUR); // add an offset to file pointer to "jump over" the additional newline character
+	fseek(fp, 1, SEEK_CUR); // add an offset to file pointer's current location to "jump over" the additional newline character
 	table = (char *)malloc(table_len);
 	fread(table, sizeof(char), table_len, fp);
+
+	fclose(fp);
+	printf("Game loaded successfully!\n");
 
 	GameData gd;
 	gd.cursor = &cursor;
@@ -65,6 +70,7 @@ GameData init_game_data() {
 	unsigned int ncolumns;
 	unsigned int marks_to_win;
 	
+	printf("Starting new game!\n");
 	printf("How many columns do you need?\n");
 	scanf("%d", &ncolumns); 
 	printf("How many rows do you need?\n");
@@ -74,11 +80,12 @@ GameData init_game_data() {
 	// TODO check if marks_to_win is at least 3 or 4, but not exceeding nrows or ncolumns
 
 	Cursor cursor;
-	cursor.x = ncolumns / 2;
-	cursor.y = nrows / 2;
+	cursor.x = ncolumns / 2 + 1;
+	cursor.y = nrows / 2 + 1;
 	cursor.ncols = ncolumns;
 	cursor.nrows = nrows;
 	cursor.marks_to_win = marks_to_win;
+	cursor.rounds_played = 0;
 	cursor.player = 0;
 	strcpy(cursor.marks, "xo");
 
@@ -86,10 +93,10 @@ GameData init_game_data() {
 	char table[ntiles + 1];
 	for (int i = 0; i < ntiles; i++) table[i] = ' ';
 	table[ntiles] = '\0';
+	printf("%s\n", table);
 
 	GameData gd;
 	gd.cursor = &cursor;
 	gd.table = table;
-
 	return gd;
 }

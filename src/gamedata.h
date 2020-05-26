@@ -5,6 +5,6 @@ typedef struct GameData {
 
 void save_to_file(GameData *gd);
 
-GameData read_from_file();
+GameData load_from_file();
 
 GameData init_game_data();
