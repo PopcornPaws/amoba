@@ -7,16 +7,22 @@
 #include "gamedata.h"
 
 void main(void) {
+	// Saving and loading files is possible through a designated GameData struct that
+	// holds two pointers: one to a Cursor struct that describes the cursor's location, 
+	// which player's turn it is, etc..., and one to the table which is a 1D array representation of
+	// the game area. It may hold a ' ' (space) character to indicate the tile is free. Characters
+	// 'x' and 'o' indicate that the tile is occupied by one of the players already.
+	GameData gd;
+	
 	// user may choose to start a new game, load an existing game or exit
 	int gamemode;
-	GameData gd = init_game_data();
-	/*
+
 	printf("Welcome to Noughts and Crosses game!\n");
 	printf("Please choose a number to play:\n");
 	printf("0 -> Start new game\n");
 	printf("1 -> Load game\n");
 	printf("other -> Exit\n");
-	scanf("%d", gamemode);
+	scanf("%d", &gamemode);
 	switch (gamemode) {
 		case 0:
 			gd = init_game_data();
@@ -28,12 +34,6 @@ void main(void) {
 			printf("Exiting game!\n");
 			exit(0);
 	}
-	*/
-	// Saving and loading files is possible through a designated GameData struct that
-	// holds two pointers: one to a Cursor struct that describes the cursor's location, 
-	// which player's turn it is, etc..., and one to the table which is a 1D array representation of
-	// the game area. It may hold a ' ' (space) character to indicate the tile is free. Characters
-	// 'x' and 'o' indicate that the tile is occupied by one of the players already.
 
 	// Create local instances of cursor and table to avoid having to use double pointers
 	// through GameData. This makes the code a bit easier to read, although it uses more
@@ -49,19 +49,16 @@ void main(void) {
 	cursor.player = gd.cursor -> player;
 	strcpy(cursor.marks, gd.cursor -> marks);
 
-	printf("%d\n", cursor.ncols * cursor.nrows + 1);
-	char *table;
-	memcpy(table, gd.table, cursor.ncols * cursor.nrows + 1);
+	char table[cursor.ncols * cursor.nrows + 1];
+	memcpy(table, gd.table, cursor.ncols * cursor.nrows + 2);
 
-	table[0] = 'x';
-	table[1] = 'o';
-	table[2] = 'x';
-	table[cursor.ncols * cursor.nrows - 1] = 'x';
+	printf("%s\n", gd.table);
 	printf("%s\n", table);
 
-//	GameData savegame = {&cursor, table};
-//	save_to_file(&savegame);
+	GameData savegame = {&cursor, table};
+	save_to_file(&savegame);
 
+	exit(0);
 	initscr(); // initialize curses
 	noecho(); // don't echo keystrokes (so it won't output what the user is typing)
 	raw(); // disable all default key commands (e.g. Ctrl + c)

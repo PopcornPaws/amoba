@@ -93,7 +93,6 @@ GameData init_game_data() {
 	char table[ntiles + 1];
 	for (int i = 0; i < ntiles; i++) table[i] = ' ';
 	table[ntiles] = '\0';
-	printf("%s\n", table);
 
 	GameData gd;
 	gd.cursor = &cursor;
