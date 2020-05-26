@@ -11,6 +11,7 @@ typedef struct Cursor {
 
 int get_table_index(int x, int y, int ncolumns);
 
+int is_free(char *table, int index);
+
 int is_winner(Cursor *c, char *table);
 
-int is_free(char *table, int index);

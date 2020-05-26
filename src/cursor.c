@@ -4,6 +4,10 @@ int get_table_index(int x, int y, int ncolumns) {
 	return x + y * ncolumns;
 }
 
+int is_free(char *table, int index) {
+	return table[index] == ' ';
+}
+
 int is_winner(Cursor *c, char *table) {
 	int counter = 0; // counter of same consecutive marks
 	int N = 0, S = 0, E = 0, W = 0; // norht, south, east, west absolute shift from center point
@@ -73,9 +77,4 @@ int is_winner(Cursor *c, char *table) {
 	}
 	// if there are not enough markers in any direction we haven't won yet
 	return 0;
-}
-
-int is_free(char *table, int index) {
-
-	return table[index] == ' ';
 }
