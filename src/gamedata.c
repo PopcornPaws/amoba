@@ -75,13 +75,10 @@ GameData init_game_data() {
 	printf("How many consecutive marks should win?\n");
 	scanf("%d", &marks_to_win); 
 	
-	if(nrows < 3) { 
-		nrows = 3;
-	} else if (ncolumns < 3) {
-		ncolumns = 3;
-	} else if (marks_to_win < 3) {
-		marks_to_win = 3;
-	}
+	// check if input makes sense
+	if(nrows < 3) nrows = 3;
+	if (ncolumns < 3) ncolumns = 3;
+	if (marks_to_win < 3) marks_to_win = 3;
 
 	Cursor cursor;
 	cursor.x = ncolumns / 2 + 1;
