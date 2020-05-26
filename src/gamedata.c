@@ -7,9 +7,8 @@
 void save_to_file(GameData *gd) {
 	char path[] = "data/"; 
 	char filename[10];
-	//printf("Please type the name of the file:\n");
-	//scanf("%s", filename); 
-	strcpy(filename, "test");
+	printf("Please type the name of the file:\n");
+	scanf("%s", filename); 
 	strcat(filename, ".dat");
 	strcat(path, filename);
 
@@ -31,9 +30,8 @@ void save_to_file(GameData *gd) {
 GameData load_from_file() {
 	char path[] = "data/"; 
 	char filename[10];
-	//printf("Please type the name of the file:\n");
-	//scanf("%s", filename); 
-	strcpy(filename, "test");
+	printf("Please type the name of the file:\n");
+	scanf("%s", filename); 
 	strcat(filename, ".dat");
 	strcat(path, filename);
 
@@ -50,7 +48,6 @@ GameData load_from_file() {
 
 	fread(&cursor, sizeof(Cursor), 1, fp);
 	int table_len = cursor.ncols * cursor.nrows + 1;
-	printf("len = %d\n", table_len);
 
 	fseek(fp, 1, SEEK_CUR); // add an offset to file pointer's current location to "jump over" the additional newline character
 	table = (char *)malloc(table_len);

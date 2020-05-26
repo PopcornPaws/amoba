@@ -21,7 +21,7 @@ void main(void) {
 	printf("Please choose a number to play:\n");
 	printf("0 -> Start new game\n");
 	printf("1 -> Load game\n");
-	printf("other -> Exit\n");
+	printf("_ -> Exit\n");
 	scanf("%d", &gamemode);
 	switch (gamemode) {
 		case 0:
@@ -52,13 +52,7 @@ void main(void) {
 	char table[cursor.ncols * cursor.nrows + 1];
 	memcpy(table, gd.table, cursor.ncols * cursor.nrows + 2);
 
-	printf("%s\n", gd.table);
-	printf("%s\n", table);
 
-	GameData savegame = {&cursor, table};
-	save_to_file(&savegame);
-
-	exit(0);
 	initscr(); // initialize curses
 	noecho(); // don't echo keystrokes (so it won't output what the user is typing)
 	raw(); // disable all default key commands (e.g. Ctrl + c)
@@ -111,6 +105,8 @@ void main(void) {
 			case KEY_RIGHT:
 				cursor.x + 1 >= cursor.ncols ? : cursor.x++;
 				break;
+			//GameData savegame = {&cursor, table};
+			//save_to_file(&savegame);
 			case KEY_BACKSPACE:
 				table_index = get_table_index(cursor.x, cursor.y, cursor.ncols);
 
