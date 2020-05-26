@@ -52,7 +52,6 @@ void main(void) {
 	char table[cursor.ncols * cursor.nrows + 1];
 	memcpy(table, gd.table, cursor.ncols * cursor.nrows + 2);
 
-
 	initscr(); // initialize curses
 	noecho(); // don't echo keystrokes (so it won't output what the user is typing)
 	raw(); // disable all default key commands (e.g. Ctrl + c)
@@ -105,9 +104,11 @@ void main(void) {
 			case KEY_RIGHT:
 				cursor.x + 1 >= cursor.ncols ? : cursor.x++;
 				break;
-			//GameData savegame = {&cursor, table};
-			//save_to_file(&savegame);
 			case KEY_BACKSPACE:
+				// save to file and quit
+				flag = -1;
+				break;
+			case 10: // ENTER = 10;
 				table_index = get_table_index(cursor.x, cursor.y, cursor.ncols);
 
 				if (is_free(table, table_index)) {
@@ -131,9 +132,19 @@ void main(void) {
 	}
 	endwin(); // close window and end ncurses session
 	printf("Finished.\n");
-	if (flag) {
-		printf("Winner is %c!\n", cursor.marks[cursor.player]);
-	} else {
-		printf("Draw!\n", cursor.marks[cursor.player]);
+	GameData savegame = {&cursor, table};
+	switch (flag) {
+		case 0:
+			printf("Draw!\n");
+			break;
+		case 1:
+			printf("Winner is %c!\n", cursor.marks[cursor.player]);
+			break;
+		case -1:
+			save_to_file(&savegame);
+			break;
+		default:
+			printf("Bye!\n");
+			break;
 	}
 }

@@ -6,7 +6,7 @@
 
 void save_to_file(GameData *gd) {
 	char path[] = "data/"; 
-	char filename[10];
+	char filename[30];
 	printf("Please type the name of the file:\n");
 	scanf("%s", filename); 
 	strcat(filename, ".dat");
@@ -29,7 +29,7 @@ void save_to_file(GameData *gd) {
 
 GameData load_from_file() {
 	char path[] = "data/"; 
-	char filename[10];
+	char filename[30];
 	printf("Please type the name of the file:\n");
 	scanf("%s", filename); 
 	strcat(filename, ".dat");
