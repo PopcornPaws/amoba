@@ -1,8 +1,8 @@
-###################### MAKEFILE for C practice codes ######################
-# Includes all necessary header files from a separate 'headers' directory #
-# Output file is generated inside a separate 'build' directory			  #
-# 'run' option is added to run the compiled output file instantaneously	  #
-###########################################################################
+###################### MAKEFILE for C practice codes #####################
+# Includes all necessary .h and .c files from a separate 'src' directory #
+# Output file is generated inside a separate 'build' directory			 #
+# 'run' option is added to run the compiled output file instantaneously	 #
+##########################################################################
 
 # Define project name (file to compile)
 PROJECT = main
