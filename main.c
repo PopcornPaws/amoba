@@ -77,10 +77,12 @@ void main(void) {
 				case 'x':
 					attron(COLOR_PAIR(1)); // switch color pair to match the player's
 					mvaddch(row, col, 'x'); // add character mark to curses game area
+					attroff(COLOR_PAIR(1)); // switch color pair to match the player's
 					break;
 				case 'o':
 					attron(COLOR_PAIR(2)); // switch color pair to match the player's
 					mvaddch(row, col, 'o'); // add character mark to curses game area
+					attroff(COLOR_PAIR(2)); // switch color pair to match the player's
 					break;
 				default:
 					break;
