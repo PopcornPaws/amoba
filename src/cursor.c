@@ -20,8 +20,8 @@ int is_winner(Cursor *c, char *table) {
 		i++;
 		(c -> y - N) > 0 ? N++ : N;
 		(c -> x - W) > 0 ? W++ : W;
-		S < (c -> nrows) ? S++ : S;
-		E < (c -> ncols) ? E++ : E;
+		(c -> y + S) < (c -> nrows) ? S++ : S;
+		(c -> x + E) < (c -> ncols) ? E++ : E;
 	}
 	// save the smaller value in diagonal direction
 	NW = (N <= W ? N : W);
