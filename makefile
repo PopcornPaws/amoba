@@ -22,7 +22,7 @@ $(info $$OBJFILES is [${OBJFILES}])
 # Define compiler
 CC = gcc
 # Define compilation flags (e.g. where g++ should look for header files)
-CFLAGS = -I $(SRCDIR) -lncurses
+CFLAGS = -I $(SRCDIR) -lncurses -fdump-rtl-expand
 
 # Run the output in terminal
 run : $(OUTDIR)/$(PROJECT)
